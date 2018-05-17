@@ -2,7 +2,7 @@
  
 ServerConfig();
 
-$PdfUploadFolder = 'file/';
+$PdfUploadFolder = 'files/';
  
 $ServerURL = 'https://sisinfo.herokuapp.com/'.$PdfUploadFolder;
  
@@ -26,7 +26,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 			
             move_uploaded_file($_FILES['pdf']['tmp_name'],$PdfFileFinalPath);
 			
-            $InsertTableSQLQuery = "INSERT INTO tbl_modul (id_topic_modul, nama_modul, tgl_dibuat, link_file) VALUES ('1', 'ngising', '2018-09-12','file/$PdfName') ;";
+            $InsertTableSQLQuery = "INSERT INTO tbl_modul (id_topic_modul, nama_modul, tgl_dibuat, link_file) VALUES ('1', 'ngising', '2018-09-12','$PdfUploadFolder.$PdfName') ;";
 
             mysqli_query($con,$InsertTableSQLQuery);
 
