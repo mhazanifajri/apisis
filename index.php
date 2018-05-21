@@ -472,9 +472,45 @@ $app->post('/nilai/add',function ($request, $response,$args) {
 
 });
 
+$app->post('/topicmodul/add',function ($request, $response,$args) {
+    $input = $request->getParsedBody();
+    $username = $input['username'];
+    $id_matapelajaran = $input['id_matapelajaran'];
+    $judul = $input['judul'];
+    $date = $input['date'];
+
+    $query = "select id_guru from tbl_guru where nip = '".$username."'";
+    $result = queryGet($query);
+
+    $id_guru = $result[0]['id_guru'];
+    if($result == null){
+        $responseData = array('response_code' => 3,
+                            'response_message' => 'user tidak ditemukan'
+                            );
+    }
+    else{
+        $query = "INSERT INTO `tbl_topicmodul` (`id_matapelajaranmodul`, `judul`, `id_gurumodul`, `tgl_dibuat`) VALUES ( '".$id_matapelajaran."', '".$judul."', '".$id_guru."', '".$date."');";
+        $result = queryExecute($query);
+        if($result){
+            $responseData = array('response_code' => 1,
+                          'response_message' => 'success',
+                        );
+        }else{
+            $responseData = array('response_code' => 0,
+                          'response_message' => 'Gagal Insert ',
+                        );
+        }   
+    }
+
+
+    return $response->withStatus(200)
+        ->withHeader('Content-Type', 'application/json')
+        ->getBody()->write(json_encode($responseData));
+
+});
+
 $app->run();
 
 
 
 ?>
-
