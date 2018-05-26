@@ -509,6 +509,28 @@ $app->post('/topicmodul/add',function ($request, $response,$args) {
 
 });
 
+$app->get('/nilai[/{id_topickuis}/{username}]',function ($request, $response,$args) {
+    $id_topickuis = $args['id_topickuis'];
+    $username = $args['username'];
+    $query = "SELECT *, judul FROM `tbl_nilai` LEFT JOIN tbl_topickuis on id_topkuis = id_topic_kuis
+                where id_topic_kuis = '$id_topickuis' and username = '$username'";
+    $result = queryGet($query);
+    $responseData = array('response_code' => 0,
+                          'response_message' => 'error'
+                        );
+    if($result != null){
+         $responseData = array('response_code' => 1,
+                          'response_message' => 'success',
+                          'data' => $result
+                        );
+    }
+
+    return $response->withStatus(200)
+        ->withHeader('Content-Type', 'application/json')
+        ->getBody()->write(json_encode($responseData));
+
+});
+
 $app->run();
 
 
