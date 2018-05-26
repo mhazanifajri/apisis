@@ -509,11 +509,10 @@ $app->post('/topicmodul/add',function ($request, $response,$args) {
 
 });
 
-$app->get('/nilai[/{id_topickuis}/{username}]',function ($request, $response,$args) {
-    $id_topickuis = $args['id_topickuis'];
+$app->get('/nilai[/{username}]',function ($request, $response,$args) {
     $username = $args['username'];
     $query = "SELECT *, judul FROM `tbl_nilai` LEFT JOIN tbl_topickuis on id_topkuis = id_topic_kuis
-                where id_topic_kuis = '$id_topickuis' and username = '$username'";
+                where username = '$username'";
     $result = queryGet($query);
     $responseData = array('response_code' => 0,
                           'response_message' => 'error'
