@@ -370,12 +370,29 @@ $app->get('/modul[/{id}]',function ($request, $response,$args) {
 
 });
 
-$app->get('/topic/kuis[/{id}]',function ($request, $response,$args) {
+$app->get('/topic/kuis[/{id}/{username}]',function ($request, $response,$args) {
     $idmapel = $args['id'];
-    $query = "SELECT tbl_topickuis.* , (nama_lengkap)nama_guru FROM `tbl_topickuis` 
-              LEFT JOIN tbl_guru on id_guru_kuis = id_guru 
-              WHERE `id_matapelajaran_kuis` = $idmapel";
+    $username = $args['username'];
+//     $query = "SELECT tbl_topickuis.* , (nama_lengkap)nama_guru FROM `tbl_topickuis` 
+//               LEFT JOIN tbl_guru on id_guru_kuis = id_guru 
+//               WHERE `id_matapelajaran_kuis` = $idmapel";
+        $query = "SELECT * FROM (
+                    SELECT a.*, c.nilai, c.tgl_post, IFNULL(c.username, $username) username, (nama_lengkap)nama_guru 
+                    FROM tbl_topickuis a
+                    LEFT JOIN tbl_kuis b ON b.id_topkuis = a.id_topkuis
+                    LEFT JOIN tbl_guru on id_guru_kuis = id_guru 
+                    LEFT JOIN (
+                        SELECT c1.* FROM tbl_nilai c1
+                        LEFT JOIN tbl_siswa c2 ON c2.nik = c1.username
+                    ) c ON c.id_topic_kuis=b.id_topkuis
+                    WHERE a.id_matapelajaran_kuis=$idmapel
+                ) t
+                WHERE t.username = $username
+                GROUP BY t.id_topkuis
+                ORDER BY t.tgl_post DESC ";
+    
     $result = queryGet($query);
+    
     $responseData = array('response_code' => 0,
                           'response_message' => 'error'
                         );
