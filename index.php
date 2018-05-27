@@ -377,7 +377,7 @@ $app->get('/topic/kuis[/{id}/{username}]',function ($request, $response,$args) {
 //               LEFT JOIN tbl_guru on id_guru_kuis = id_guru 
 //               WHERE `id_matapelajaran_kuis` = $idmapel";
         $query = "SELECT * FROM (
-                    SELECT a.*, IFNULL(c.nilai, "-")nilai, c.tgl_post, IFNULL(c.username, $username) username, (nama_lengkap)nama_guru 
+                    SELECT a.*, IFNULL(c.nilai, '-') nilai, c.tgl_post, IFNULL(c.username, $username) username, (nama_lengkap)nama_guru 
                     FROM tbl_topickuis a
                     LEFT JOIN tbl_kuis b ON b.id_topkuis = a.id_topkuis
                     LEFT JOIN tbl_guru on id_guru_kuis = id_guru 
